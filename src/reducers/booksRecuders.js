@@ -1,21 +1,38 @@
 "use strict"
 
 //BOOKS REDUCERS
-export  function booksReducers (state = { books: [] }, action) {
-  switch (action.type) 
+export  function booksReducers (state = {
+  books: [
+    {
+    	_id: 1,
+    	title: 'this is the book title',
+    	description: 'this is the book description',
+    	price: 44.33
+    },
+    {
+    	_id: 2,
+    	title: 'this is the second book title',
+    	description: 'this is the second book description',
+    	price: 55
+    }]
+}, action) {
+  switch (action.type)
   {
-    case "POSTBOOK":
+    case "GET_BOOKS":
+      return {...state, books: [...state.books]}
+    break;
+    case "POST_BOOK":
       // let books = state.books.concat(action.payload);
       // return {books};
       return { books: [...state.books, ...action.payload] }
-      //break;
+    break;
     case "DELETE_BOOK":
       //Create a copy of the current array of books
       const currentBookToDelete = [...state.books];
       //Determine at which index in books array is the book to be deleted
       const indexToDelete = currentBookToDelete.findIndex(
         function (book) {
-          return book.id === action.payload.id;
+          return book._id === action.payload._id;
         }
       )
       //use slice to remove the book at the specified index
@@ -23,7 +40,7 @@ export  function booksReducers (state = { books: [] }, action) {
         books: [...currentBookToDelete.slice(0, indexToDelete),
         ...currentBookToDelete.slice(indexToDelete + 1)]
       }
-      //break;
+    break;
 
     case "UPDATE_BOOK":
       //Create a copy of the current array of books
@@ -31,7 +48,7 @@ export  function booksReducers (state = { books: [] }, action) {
       //Determine at which index in books array is the book to be deleted
       const indexToUpdate = currentBookToUpdate.findIndex(
         function (book) {
-          return book.id === action.payload.id;
+          return book._id === action.payload._id;
         }
       )
 
@@ -48,7 +65,7 @@ export  function booksReducers (state = { books: [] }, action) {
       //use slice to remove the book at the specified index, replace with the
       //new object and concatenate with he rest of items in array
       return { books: [...currentBookToUpdate.slice(0, indexToUpdate), newBookToUpdate, ...currentBookToUpdate.slice(indexToUpdate + 1)] }
-      //break;
+    break;
   }
   return state
 }
