@@ -1,10 +1,22 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Panel, Col, Row, Button, Well, ButtonGroup, Label} from 'react-bootstrap';
+import {Modal, Panel, Col, Row, Button, Well, ButtonGroup, Label} from 'react-bootstrap';
 import {bindActionCreators} from 'redux';
 import {deleteCartItem, updateCart} from '../../actions/cartActions';
 
 class Cart extends React.Component {
+  constructor(){
+    super();
+    this.state = {
+      showModal: false
+    }
+  }
+  open(){
+    this.setState({showModal: true});
+  }
+  close(){
+    this.setState({showModal: false});
+  }
   onDelete(_id) {
 
     //Create a copy of the current array of books
@@ -74,6 +86,29 @@ class Cart extends React.Component {
     return(
       <Panel header="Cart" bsStyle="primary">
         {cartItemsList}
+        <Row>
+          <Col xs={12}>
+            <h6>Total amount:</h6>
+            <Button onClick={() => this.open()} bsStyle="success" bsSize="small">
+              PROCEED TO CHECKOUT
+            </Button>
+          </Col>
+        </Row>
+        <Modal show={this.state.showModal} onHide={this.close.bind(this)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Thank you!</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <h6>Your order has been saved</h6>
+              <p>You will receive an email confirmation</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Col xs={6}>
+              totle $:
+            </Col>
+            <Button onClick={this.close.bind(this)}>Close</Button>
+          </Modal.Footer>
+        </Modal>
       </Panel>
     )
   }
