@@ -22,19 +22,40 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('*', function(req, res) {
+// APIs
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/bookshop');
+
+var Books = require('./models/books.js');
+
+// ========= POST BOOKS ===========
+app.post('/books', (req, res) => {
+  var book = req.body;
+
+  Books.create(book, (err, books) => {
+    if(err){
+      throw err;
+    }
+    res.json(books);
+  });
+});
+
+// END APIs
+
+
+app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'public', 'index.html'))
 })
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
