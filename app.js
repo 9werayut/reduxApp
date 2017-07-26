@@ -40,6 +40,52 @@ app.post('/books', (req, res) => {
   });
 });
 
+// ========== GET BOOKS ============
+app.get('/books', (req, res) => {
+  Books.find((err, books) => {
+    if(err) throw err;
+
+    res.json(books);
+  })
+});
+
+// ========== DELETE BOOKS =========
+app.delete('/books/:_id', (req, res) => {
+
+  let criteria = {_id: req.params._id}
+
+  Books.remove(criteria, (err, books) => {
+    if(err) throw err;
+
+    res.json(books);
+  })
+});
+
+// ========= UPDATE BOOKS ==========
+app.put('/books/:_id', (req, res) => {
+  let book = req.body;
+  let criteria = req.params._id;
+  
+  //if the field doesn't exist $set will set a new field
+  var update = {
+    '$set': {
+      title: book.title,
+      description: book.description,
+      image: book.image,
+      price: book.price
+    }
+  };
+
+  // when true returns the update document
+  let options = {new: true};
+
+  Books.findOneAndUpdate(criteria, update, options, (err, books) => {
+    if(err) throw err;
+
+    res.json(books);
+  })
+});
+
 // END APIs
 
 

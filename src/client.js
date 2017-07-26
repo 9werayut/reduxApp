@@ -9,7 +9,7 @@ import {Router, Route, IndexRoute, browserHistory, hashHistory} from 'react-rout
 //Redux
 import { createStore, applyMiddleware } from 'redux';
 import {createLogger} from 'redux-logger';
-
+import thunk from 'redux-thunk';
 
 //import combine reducers
 import reducers from './reducers';
@@ -19,7 +19,7 @@ import { addToCart } from './actions/cartActions';
 import { postBooks, deleteBooks, updateBooks } from './actions/bookActions';
 
 //create the store
-const middleware = applyMiddleware(createLogger());
+const middleware = applyMiddleware(thunk, createLogger());
 const store = createStore(reducers, middleware);
 
 
